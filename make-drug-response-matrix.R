@@ -4,6 +4,7 @@ make.response.matrix <- function(drug.response, drug.profiles, ccle.expression) 
 	sample.names <- colnames(ccle.expression)
 	n.points <- dim(drug.response)[[1]]
 	n.drugs <- length(drug.names)
+	n.ccle.samples <- dim(ccle.expression)[[2]]
 
 	response.matrix <- matrix(0, n.ccle.samples, n.drugs)
 	

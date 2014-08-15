@@ -11,8 +11,8 @@ make.altnames.map <- function(expression) {
 	names <- expression[,2]
 	map <- list()
 	for(i in 1:length(altnames)) {
-		altname <- altnames[[i]]
-		name <- names[[i]]
+		altname <- as.character(altnames[[i]])
+		name <- as.character(names[[i]])
 		map[[altname]] <- name
 	}
 	return(map)
@@ -38,9 +38,25 @@ read.challenge.data <- function() {
 	save(name.map, expression.training, essentiality, expression.leaderboard, copynumber.training, copynumber.leaderboard, file="/home/alden/dream9tools/parsed-data/challenge-parsed.RData")
 
 }
+ccle.expression.matrix <- function(ccle.expression) {
+	rnames <- ccle.expression[,1]
+	duplicates <- which(duplicated(rnames) == TRUE)
+	while(length(duplicates) > 0) {
+		print(duplicates)
+		rnames <- rnames[-duplicates[[1]]]
+		ccle.expression <- ccle.expression[-duplicates[[1]],]
+		duplicates <- which(duplicated(rnames) == TRUE)
+	}
+	rownames(ccle.expression) <- rnames
+	ccle.expression <- ccle.expression[,-1]
+	ccle.expression <- as.matrix(ccle.expression)
+	return(ccle.expression)
+}
+
 
 read.ccle.data <- function() {
 	ccle.expression <- read.table("/home/alden/dream9tools/data/CCLE_Expression_Entrez_2012-09-29.tab", header=TRUE, fill=TRUE)
+	ccle.expression <- ccle.expression.matrix(ccle.expression)
 	drug.data <- read.csv("/home/alden/dream9tools/data/CCLE_NP24.2009_Drug_data_2012.02.20.csv", header=TRUE)
 	drug.profiles <- read.csv("/home/alden/dream9tools/data/CCLE_NP24.2009_profiling_2012.02.20.csv", header=TRUE)
 

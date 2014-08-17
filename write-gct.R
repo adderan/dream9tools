@@ -1,4 +1,5 @@
 write.gct <- function(results, filename) {
+	print("wriing gct")
 	sink(filename)
 	cat("#1.2\n")
 	cat(dim(results)[[1]], "\t", dim(results)[[2]], "\n")
